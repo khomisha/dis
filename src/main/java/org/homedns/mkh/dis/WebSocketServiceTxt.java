@@ -91,7 +91,7 @@ public abstract class WebSocketServiceTxt extends Endpoint {
 	/**
 	 * Process received message
 	 * 
-	 * @param the message to process
+	 * @param message the message to process
 	 * @param reb the remote end point
 	 * 
 	 * @throws Exception

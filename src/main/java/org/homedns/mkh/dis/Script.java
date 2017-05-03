@@ -74,8 +74,8 @@ public class Script {
 	}
 
 	/**
-	 * Returns the script type job {@link this#JOB} or transmission 
-	 * {@link this#TRANS}
+	 * Returns the script type job {@link org.homedns.mkh.dis.Script#JOB} or transmission 
+	 * {@link org.homedns.mkh.dis.Script#TRANS}
 	 * 
 	 * @return the script type
 	 */
@@ -112,8 +112,8 @@ public class Script {
 	}
 
 	/**
-	 * Returns the run type scheduled {@link this#SCHEDULED} or on client
-	 * request {@link this#ON_REQUEST}
+	 * Returns the run type scheduled {@link org.homedns.mkh.dis.Script#SCHEDULED} or on client
+	 * request {@link org.homedns.mkh.dis.Script#ON_REQUEST}
 	 * 
 	 * @return the run type
 	 */
@@ -132,8 +132,8 @@ public class Script {
 	}
 
 	/**
-	 * Sets the script type job {@link this#JOB} or transmission 
-	 * {@link this#TRANS}
+	 * Sets the script type job {@link org.homedns.mkh.dis.Script#JOB} or transmission 
+	 * {@link org.homedns.mkh.dis.Script#TRANS}
 	 * 
 	 * @param sType
 	 *            the script type to set
@@ -174,11 +174,11 @@ public class Script {
 	}
 
 	/**
-	 * Sets the run type scheduled {@link this#SCHEDULED} or on client
-	 * request {@link this#ON_REQUEST}
+	 * Sets the run type scheduled {@link org.homedns.mkh.dis.Script#SCHEDULED} or on client
+	 * request {@link org.homedns.mkh.dis.Script#ON_REQUEST}
 	 * 
-	 * @param sRunType
-	 *            the sRunType to set
+	 * @param iRunType
+	 *            the iRunType to set
 	 */
 	public void setRunType( int iRunType ) {
 		this.iRunType = iRunType;
@@ -203,7 +203,7 @@ public class Script {
 	}
 
 	/**
-	 * Returns script state {@link this#ON} or {@link this#OFF}
+	 * Returns script state {@link org.homedns.mkh.dis.Script#ON} or {@link org.homedns.mkh.dis.Script#OFF}
 	 * 
 	 * @return the script state
 	 */
@@ -212,7 +212,7 @@ public class Script {
 	}
 
 	/**
-	 * Sets script state {@link this#ON} or {@link this#OFF}
+	 * Sets script state {@link org.homedns.mkh.dis.Script#ON} or {@link org.homedns.mkh.dis.Script#OFF}
 	 * 
 	 * @param iState the script state to set
 	 */

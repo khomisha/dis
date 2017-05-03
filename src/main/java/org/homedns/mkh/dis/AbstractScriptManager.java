@@ -56,7 +56,7 @@ public abstract class AbstractScriptManager implements ScriptManager {
 	}
 
 	/**
-	 * @see org.homedns.mkh.dis.ScriptManager#retrieve()
+	 * @see org.homedns.mkh.dis.ScriptManager#retrieve(org.homedns.mkh.dis.Env)
 	 */
 	@Override
 	public int retrieve( Env env ) throws Exception {

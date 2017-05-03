@@ -38,7 +38,7 @@ public abstract class Executor implements org.quartz.Job {
 	private Map< String, String[] > scriptParams; 
 
 	/**
-	 * @see org.quartz.Job#executeOnSchedule(org.quartz.JobExecutionContext)
+	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
 	 */
 	@Override
 	public void execute( JobExecutionContext context ) throws JobExecutionException {

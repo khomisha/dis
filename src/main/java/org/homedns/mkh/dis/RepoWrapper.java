@@ -128,7 +128,7 @@ public class RepoWrapper {
 	/**
 	 * Returns repository
 	 * 
-	 * @return
+	 * @return repository
 	 */
 	public Repository getRepo( ) {
 		return( repo );
