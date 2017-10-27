@@ -42,12 +42,17 @@ public class TransExecutor extends Executor {
 		Script script = ServerContext.INSTANCE.getScriptMgr( ).getScript( getScriptName( ) ); 
 	    TransMeta transMeta = ( TransMeta )script.getMeta( );
 	    Trans trans = new Trans( transMeta );
-	    if( !isScriptParamsEmpty( ) ) {
-	    	setVariablesValues( trans );
-	    	transMeta.setInternalKettleVariables( trans );
+	    try {
+		    if( !isScriptParamsEmpty( ) ) {
+		    	setVariablesValues( trans );
+		    	transMeta.setInternalKettleVariables( trans );
+		    }
+		    trans.execute( null );
+		    trans.waitUntilFinished( );
+		    onError( trans.getErrors( ), trans.getLogChannelId( ) );
 	    }
-	    trans.execute( null );
-	    trans.waitUntilFinished( );
-	    onError( trans.getErrors( ), trans.getLogChannelId( ) );
+	    finally {
+	    	trans.cleanup( );
+	    }
 	}
 }

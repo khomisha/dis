@@ -49,7 +49,7 @@ public abstract class Executor implements org.quartz.Job {
 			LOG.info( "=== " + sJobName + ": completed: " + new Date( ) + " ===" );
 		} 
 		catch( KettleException e ) {
-//			LOG.error( sJobName + ": " + e.getMessage( ), e );
+			LOG.error( sJobName + ": " + e.getMessage( ), e );
 			JobExecutionException ex = new JobExecutionException( e );
 			ex.setUnscheduleFiringTrigger( true );
 			throw ex;
