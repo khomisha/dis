@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Mikhail Khodonov
+ * Copyright 2015 - 2018 Mikhail Khodonov
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,19 +21,12 @@ package org.homedns.mkh.dis;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.apache.log4j.Logger;
 import org.homedns.mkh.databuffer.DataBuffer;
 import org.homedns.mkh.databuffer.DataBufferMetaData;
-import org.pentaho.di.core.exception.KettleException;
 
 public abstract class AbstractScriptManager implements ScriptManager {
-	private static final Logger LOG = Logger.getLogger( AbstractScriptManager.class );
-
 	private ConcurrentHashMap< String, Script > scripts = new ConcurrentHashMap< String, Script >( );
 	private List< Script > scheduled = new ArrayList< Script >( );
 
@@ -104,71 +97,5 @@ public abstract class AbstractScriptManager implements ScriptManager {
 	@Override
 	public void addScheduledScript( Script script ) {
 		scheduled.add( script );
-	}
-
-	/**
-	 * @see org.homedns.mkh.dis.ScriptManager#isActive(java.lang.String)
-	 */
-	@Override
-	public boolean isActive( String sScriptName ) {
-		if( scripts.containsKey( sScriptName ) ) {
-			if( Script.ON == getScript( sScriptName ).getState( ) ) {
-				return( true );
-			}
-		}
-		return( false );
-	}
-
-
-	/**
-	 * @see org.homedns.mkh.dis.ScriptManager#execScript(java.lang.String)
-	 */
-	@Override
-	public void execScript( String sScriptParams ) throws KettleException {
-		String sScriptName = "";
-		Map< String, String[] > scriptParams = new HashMap< String, String[] >( );
-		String[] as = sScriptParams.split( "&" );
-		for( String s : as ) {
-			String[] pair = s.split( "=" );
-			if( SCRIPT_NAME_PARAM.equals( pair[ 0 ].trim( ) ) ) {
-				sScriptName = pair[ 1 ].trim( );
-				continue;
-			}
-			LOG.debug( "param name: " + pair[0] + "value: " + pair[ 1 ] );
-			scriptParams.put( pair[ 0 ].trim( ), new String[] { pair[ 1 ].trim( ) } );
-		}
-		execScript( sScriptName, scriptParams );
-	}
-
-	/**
-	 * @see org.homedns.mkh.dis.ScriptManager#execScript(java.util.Map)
-	 */
-	@Override
-	public void execScript( Map< String, String[] > scriptParams ) throws KettleException {
-		String sScriptName = scriptParams.get( SCRIPT_NAME_PARAM )[ 0 ];
-		scriptParams.remove( sScriptName );
-		execScript( sScriptName, scriptParams );
-	}
-
-	/**
-	 * Executes script
-	 * 
-	 * @param sScriptName the script name to execute
-	 * @param scriptParams the script parameters map
-	 * @throws KettleException 
-	 */
-	protected void execScript( String sScriptName, Map< String, String[] > scriptParams ) throws KettleException {
-		if( isActive( sScriptName ) ) {
-		    LOG.info( sScriptName + ": executing at: " + new Date( ) );
-		    Script script = getScript( sScriptName );
-		    String sType = script.getType( );
-		    Executor executor = ( Script.JOB.equals( sType ) ) ? new JobExecutor( ) : new TransExecutor( );
-		    executor.setScriptName( sScriptName );
-		    executor.setScriptParams( scriptParams );
-		    executor.executeScript( );
-			LOG.info( sScriptName + ": completed: " + new Date( ) );
-		} else {
-			LOG.warn( "Non active script: " + sScriptName );
-		}		
 	}
 }

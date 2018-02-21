@@ -18,19 +18,16 @@
 
 package org.homedns.mkh.dis;
 
-import javax.servlet.http.HttpSession;
 import javax.websocket.HandshakeResponse;
 import javax.websocket.server.HandshakeRequest;
 import javax.websocket.server.ServerEndpointConfig;
 import javax.websocket.server.ServerEndpointConfig.Configurator;
-import org.apache.log4j.Logger;
 
 /**
  * Custom server end point configurator
  *
  */
 public class ServerEndpointConfigurator extends Configurator {
-	private static final Logger LOG = Logger.getLogger( ServerEndpointConfigurator.class );
 
 	/**
 	 * @see javax.websocket.server.ServerEndpointConfig.Configurator#modifyHandshake(javax.websocket.server.ServerEndpointConfig, javax.websocket.server.HandshakeRequest, javax.websocket.HandshakeResponse)
@@ -41,15 +38,6 @@ public class ServerEndpointConfigurator extends Configurator {
 		HandshakeRequest request, 
 		HandshakeResponse response 
 	) {
-		HttpSession httpSession = ( HttpSession )request.getHttpSession( );
-		if( httpSession != null ) {
-			Object ctx = httpSession.getServletContext( ).getAttribute( 
-				ServerContext.CTX_ATTRIBUTE 
-			);
-	        // This is safe to do because it's the same instance of ServerContext all the time
-	        sec.getUserProperties( ).put( ServerContext.CTX_ATTRIBUTE, ctx );
-	        LOG.debug( ServerContext.CTX_ATTRIBUTE + " put to the user property" );
-		}
         super.modifyHandshake( sec, request, response );
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Mikhail Khodonov
+ * Copyright 2015 - 2018 Mikhail Khodonov
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -36,8 +36,6 @@ import org.apache.log4j.Logger;
 public abstract class WebSocketServiceTxt extends Endpoint {
 	private static final Logger LOG = Logger.getLogger( WebSocketServiceTxt.class );
 	
-	private ServerContext ctx;
-	
 	 /**
 	 * @see javax.websocket.Endpoint#onOpen(javax.websocket.Session, javax.websocket.EndpointConfig)
 	 */
@@ -45,7 +43,6 @@ public abstract class WebSocketServiceTxt extends Endpoint {
 	public void onOpen( Session session, EndpointConfig end ) {
 		RemoteEndpoint.Basic reb = session.getBasicRemote( );
 		session.addMessageHandler( new MessageHandlerTxt( reb ) );
-		ctx = ( ServerContext )end.getUserProperties( ).get( ServerContext.CTX_ATTRIBUTE );
 	}
 
 	/**
@@ -62,7 +59,7 @@ public abstract class WebSocketServiceTxt extends Endpoint {
 		 * @see javax.websocket.MessageHandler.Whole#onMessage(java.lang.Object)
 		 */
 		@Override
-		public void onMessage( String message ) {
+		public void onMessage( final String message ) {
 			try {
 				processMessage( message, reb );
 			}
@@ -76,16 +73,6 @@ public abstract class WebSocketServiceTxt extends Endpoint {
 				}
 			}
 		}
-	}
-
-	
-	/**
-	 * Returns data integration server context
-	 * 
-	 * @return the server context
-	 */
-	public ServerContext getServerContext( ) {
-		return( ctx );
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Mikhail Khodonov
+ * Copyright 2015 - 2018 Mikhail Khodonov
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -19,9 +19,6 @@
 package org.homedns.mkh.dis;
 
 import java.util.List;
-import java.util.Map;
-
-import org.pentaho.di.core.exception.KettleException;
 
 /**
  * Manages scripts, e.g. retrieves script data from DB, builds script objects, execute scripts
@@ -74,35 +71,4 @@ public interface ScriptManager {
 	 * @param script the scheduled script to add
 	 */
 	public void addScheduledScript( Script script );
-	
-	/**
-	 * Return true if script exists and active (execution on) and false
-	 * otherwise
-	 * 
-	 * @param sScriptName
-	 *            the script name
-	 * 
-	 * @return true or false
-	 */
-	public boolean isActive( String sScriptName );
-	
-	/**
-	 * Executes script
-	 * 
-	 * @param sScriptParams the script name with parameters, parameters are optional 
-	 * it has following format: "param_name1=param_value1&param_name2=param_value2&...".
-	 * First parameter is script name.
-	 * 
-	 * @throws KettleException 
-	 */
-	public void execScript( String sScriptParams ) throws KettleException;
-	
-	/**
-	 * Executes script
-	 * 
-	 * @param scriptParams the parameters map, including script name
-	 *  
-	 * @throws KettleException 
-	 */
-	public void execScript( Map< String, String[] > scriptParams ) throws KettleException;
 }

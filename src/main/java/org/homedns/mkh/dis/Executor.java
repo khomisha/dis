@@ -43,8 +43,8 @@ public abstract class Executor implements org.quartz.Job {
 	@Override
 	public void execute( JobExecutionContext context ) throws JobExecutionException {
 		String sJobName = ScriptScheduler.getJobName( context.getJobDetail( ).getKey( ) );
-	    LOG.info( "=== " + sJobName + ": executing at: " + new Date( ) + " ===" );
 		try {
+		    LOG.info( "=== " + sJobName + ": executing at: " + new Date( ) + " ===" );
 			executeScript( );
 			LOG.info( "=== " + sJobName + ": completed: " + new Date( ) + " ===" );
 		} 
@@ -116,7 +116,6 @@ public abstract class Executor implements org.quartz.Job {
 	protected void setVariablesValues( VariableSpace space ) {
 		space.initializeVariablesFrom( null );
 		for( String sParamName : scriptParams.keySet( ) ) {
-			LOG.debug( "set variable: " + sParamName + " value: " + scriptParams.get( sParamName )[ 0 ] );
 			space.setVariable( sParamName, scriptParams.get( sParamName )[ 0 ] );
 			LOG.debug( "get variable: " + sParamName + " value: " + space.getVariable( sParamName ) );
 		}		

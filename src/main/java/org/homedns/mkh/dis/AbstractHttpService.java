@@ -53,20 +53,15 @@ public abstract class AbstractHttpService extends HttpServlet {
 	 */
 	protected void makeResponse( HttpServletResponse resp, String sMsg ) {
 		resp.setContentType( "text/html" );
-		PrintWriter out = null;
-		try {
-			out = resp.getWriter( );
+		try(
+			PrintWriter out = resp.getWriter( );
+		) {
 			out.println( "<html><head>" );
 			out.println( "<title>Script execution result</title></head><body>" );
 			out.println( sMsg );
 			out.println( "</body></html>" );
 		} catch( IOException e ) {
 			LOG.error( e.getMessage( ), e );
-		}
-		finally {
-			if( out != null ) {
-				out.close( );
-			}
 		}
 	}
 }

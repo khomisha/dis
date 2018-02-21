@@ -32,6 +32,7 @@ import javax.sql.DataSource;
  *
  */
 public class Util {
+	private static long lUID = System.currentTimeMillis( );
 
 	/**
 	 * Returns data source. 
@@ -86,5 +87,12 @@ public class Util {
 		return( 
 			DateFormat.getDateTimeInstance( DateFormat.SHORT, DateFormat.SHORT ).format( new Date( ) ) 
 		);
+	}
+	
+	/**
+	* Returns generated unique id.
+	*/
+	public static long getUID( ) {
+		return( lUID++ );
 	}
 }
