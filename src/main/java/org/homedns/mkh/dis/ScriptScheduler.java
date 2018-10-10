@@ -21,7 +21,6 @@ package org.homedns.mkh.dis;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.quartz.CronScheduleBuilder;
@@ -62,6 +61,7 @@ public class ScriptScheduler {
 		for( Script sc : scripts ) {
 			addJob( sc );
 		}
+		addJob( new Cleaner( ServerContext.INSTANCE.getParameters( ).getProperty( "CRON_EXP" ) ) );
 		scheduler.getListenerManager( ).addTriggerListener( 
 			new TriggerListenerSupport( ) {
 				@Override
@@ -98,24 +98,24 @@ public class ScriptScheduler {
 	/**
 	 * Adds new job to scheduler
 	 * 
-	 * @param sc
-	 *            script object
+	 * @param scj
+	 *            scheduled job object
 	 * 
 	 * @throws ClassNotFoundException
 	 * @throws SchedulerException
 	 */
-	private void addJob( Script sc ) throws ClassNotFoundException, SchedulerException {
+	private void addJob( ScheduledJob scj ) throws ClassNotFoundException, SchedulerException {
 		JobKey key = generateJobKey( );
-		JobDetail job = JobBuilder.newJob( sc.getClazz( ) ).withIdentity( key ).usingJobData( 
-			"scriptName", sc.getName( ) 
+		JobDetail job = JobBuilder.newJob( scj.getClazz( ) ).withIdentity( key ).usingJobData( 
+			"scriptName", scj.getName( ) 
 		).build( );
-		jobs.put( key, sc.getName( ) );
-		CronScheduleBuilder csb = CronScheduleBuilder.cronSchedule( sc.getCronSchedule( ) );
+		jobs.put( key, scj.getName( ) );
+		CronScheduleBuilder csb = CronScheduleBuilder.cronSchedule( scj.getCronSchedule( ) );
 		CronTrigger trigger = TriggerBuilder.newTrigger( ).withIdentity( 
 			generateTriggerKey( ) 
 		).withSchedule( csb ).build( );
 		scheduler.scheduleJob( job, trigger );
-		LOG.info( sc.getName( ) + " is scheduled successfully" );
+		LOG.info( scj.getName( ) + " is scheduled successfully" );
 	}
 	
 	/**
@@ -167,7 +167,7 @@ public class ScriptScheduler {
 	 * @return the job key
 	 */
 	private JobKey generateJobKey( ) {
-		String sUID = getUID( );
+		String sUID = Util.getGUID( );
 		return( JobKey.jobKey( sUID, "group_" + sUID ) );
 	}
 	
@@ -177,15 +177,7 @@ public class ScriptScheduler {
 	 * @return the trigger key
 	 */
 	private TriggerKey generateTriggerKey( ) {
-		String sUID = getUID( );
+		String sUID = Util.getGUID( );
 		return( TriggerKey.triggerKey( sUID, "group_" + sUID ) ); 
-	}
-	
-	/**
-	* Returns generated unique id.
-	*/
-	private String getUID( ) {
-//		return( String.valueOf( System.currentTimeMillis( ) ) );
-		return( UUID.randomUUID( ).toString( ) );
 	}
 }

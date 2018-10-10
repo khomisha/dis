@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 - 2017 Mikhail Khodonov
+ * Copyright 2015 - 2018 Mikhail Khodonov
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,10 +18,15 @@
 
 package org.homedns.mkh.dis;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+import org.apache.log4j.Logger;
 import org.pentaho.di.core.KettleEnvironment;
+import org.pentaho.di.core.Result;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobAdapter;
+import org.pentaho.di.job.JobEntryResult;
 import org.pentaho.di.job.JobMeta;
 
 /**
@@ -29,6 +34,7 @@ import org.pentaho.di.job.JobMeta;
  *
  */
 public class JobExecutor extends Executor {
+	private static final Logger LOG = Logger.getLogger( JobExecutor.class );
 
 	public JobExecutor( ) { }
 
@@ -43,8 +49,8 @@ public class JobExecutor extends Executor {
 
 		Script script = ServerContext.INSTANCE.getScriptMgr( ).getScript( getScriptName( ) ); 
 		JobMeta jobMeta = ( JobMeta )script.getMeta( );
-	    Job job = new Job( ServerContext.INSTANCE.getRepo( ).getRepo( ), jobMeta );
-	    job.setBatchId( Util.getUID( ) );
+		DisJob job = new DisJob( ServerContext.INSTANCE.getRepo( ).getRepo( ), jobMeta );
+	    setBatchId( job );
 	    job.addJobListener( 
 	    	new JobAdapter( ) {
 				/**
@@ -79,6 +85,8 @@ public class JobExecutor extends Executor {
 	 * @param job the finished job
 	 */
 	public void onJobFinished( Job job ) {
+		logInfo( job, "Finished" );
+		clear( job );
 	}
 	
 	/**
@@ -87,5 +95,56 @@ public class JobExecutor extends Executor {
 	 * @param job the started job
 	 */
 	public void onJobStarted( Job job ) {
+		logInfo( job, "Started" );
+	}
+
+	/**
+	 * Writes to log job status and variables values if specified
+	 * 
+	 * @param job the job to log
+	 */
+	protected void logInfo( Job job, String sStatus ) {
+		LOG.info( "<<<" );
+		LOG.info( sStatus + " job: " + getTaskId( ) );
+		if( "Finished".equals( sStatus ) ) {
+			LOG.info( job.getStatus( ) );			
+		}
+		if( LOG.isDebugEnabled( ) ) {
+			logVariables( job );
+			SimpleDateFormat fmt = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss.SSS" );
+			List< JobEntryResult > results = job.getJobEntryResults( );
+			for( JobEntryResult result : results ) {
+				LOG.debug( fmt.format( result.getLogDate( ) ) + ": " + result.getJobEntryName( ) );
+			}
+		}
+		LOG.info( ">>>" );
+	}
+
+	protected void logVariables( Job job ) {	
+	}
+	
+	/**
+	 * Sets batch id for specified job, if it necessary
+	 * 
+	 * @param job the job
+	 */
+	private void setBatchId( Job job ) {
+		if( job.getBatchId( ) == -1 ) {
+			job.setBatchId( Util.getUID( ) );
+		}
+	    setTaskId( job.getBatchId( ) );
+	}
+	
+	/**
+	 * Clears job
+	 * 
+	 * @param job the job
+	 */
+	private void clear( Job job ) {
+		Result result = job.getResult( );
+		result.getRows( ).clear( );
+		result.getResultFiles( ).clear( );
+		result.clear( );
+		job.interrupt( );		
 	}
 }

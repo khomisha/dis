@@ -25,7 +25,7 @@ import org.quartz.Job;
  * Pentaho script
  * 
  */
-public class Script {
+public class Script implements ScheduledJob {
 	public static final String JOB = "job";
 	public static final String TRANS = "trans";
 	public static final int SCHEDULED = 0;
@@ -65,9 +65,7 @@ public class Script {
 	}
 
 	/**
-	 * Returns the script name
-	 * 
-	 * @return the script name
+	 * @see org.homedns.mkh.dis.ScheduledJob#getName()
 	 */
 	public String getName( ) {
 		return( sName );
@@ -103,9 +101,7 @@ public class Script {
 	}
 
 	/**
-	 * Returns the cron expression string to base the schedule on
-	 * 
-	 * @return the cron expression string
+	 * @see org.homedns.mkh.dis.ScheduledJob#getCronSchedule()
 	 */
 	public String getCronSchedule( ) {
 		return( sCronSchedule );
@@ -122,10 +118,7 @@ public class Script {
 	}
 
 	/**
-	 * Sets the script name
-
-	 * @param sName
-	 *            the script name to set
+	 * @see org.homedns.mkh.dis.ScheduledJob#setName(java.lang.String)
 	 */
 	public void setName( String sName ) {
 		this.sName = sName;
@@ -164,10 +157,7 @@ public class Script {
 	}
 
 	/**
-	 * Sets the cron expression string to base the schedule on
-	 * 
-	 * @param sCronSchedule
-	 *            the cron expression string to set
+	 * @see org.homedns.mkh.dis.ScheduledJob#setCronSchedule(java.lang.String)
 	 */
 	public void setCronSchedule( String sCronSchedule ) {
 		this.sCronSchedule = sCronSchedule;
@@ -185,18 +175,14 @@ public class Script {
 	}
 
 	/**
-	 * Returns the executor class
-	 * 
-	 * @return the executor class
+	 * @see org.homedns.mkh.dis.ScheduledJob#getClazz()
 	 */
 	public Class< ? extends Job > getClazz( ) {
 		return clazz;
 	}
 
 	/**
-	 * Sets the executor class
-	 * 
-	 * @param clazz the executor class to set
+	 * @see org.homedns.mkh.dis.ScheduledJob#setClazz(java.lang.Class)
 	 */
 	public void setClazz( Class< ? extends Job > clazz ) {
 		this.clazz = clazz;

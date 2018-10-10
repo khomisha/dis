@@ -74,7 +74,7 @@ public class Processor {
 			    executor.setScriptName( script.getName( ) );
 			    executor.setScriptParams( scriptParams );
 			    executor.executeScript( );
-				LOG.info( script.getName( ) + ": " + sParams + ": completed: " + new Date( ) );
+				LOG.info( "job: " + executor.getTaskId( ) + ": " + script.getName( ) + ": " + sParams + ": completed: " + new Date( ) );
 		    }
 		    catch( Exception e ) {
 				LOG.error( sParams + ": " + e.getMessage( ), e );
@@ -99,7 +99,7 @@ public class Processor {
 				sScriptName = pair[ 1 ].trim( );
 				continue;
 			}
-			LOG.debug( "param name: " + pair[0] + "value: " + pair[ 1 ] );
+//			LOG.debug( "param name: " + pair[0] + "value: " + pair[ 1 ] );
 			scriptParams.put( pair[ 0 ].trim( ), new String[] { pair[ 1 ].trim( ) } );
 		}
 		script = ServerContext.INSTANCE.getScriptMgr( ).getScript( sScriptName );

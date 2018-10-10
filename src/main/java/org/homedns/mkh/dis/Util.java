@@ -21,6 +21,7 @@ package org.homedns.mkh.dis;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.naming.ConfigurationException;
 import javax.naming.Context;
@@ -94,5 +95,12 @@ public class Util {
 	*/
 	public static long getUID( ) {
 		return( lUID++ );
+	}
+
+	/**
+	* Returns generated unique id.
+	*/
+	public static String getGUID( ) {
+		return( UUID.randomUUID( ).toString( ) );
 	}
 }

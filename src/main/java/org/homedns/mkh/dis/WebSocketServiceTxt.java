@@ -18,7 +18,6 @@
 
 package org.homedns.mkh.dis;
 
-import java.io.IOException;
 import javax.websocket.Endpoint;
 import javax.websocket.EndpointConfig;
 import javax.websocket.MessageHandler;
@@ -64,12 +63,12 @@ public abstract class WebSocketServiceTxt extends Endpoint {
 				processMessage( message, reb );
 			}
 			catch( Exception e ) {
-				LOG.error( message + ": " + e.getMessage( ) );
+				LOG.error( message, e );
 				try {
-					reb.sendText( message + ": failed at " + Util.now( ) );
+					sendText( reb, message + ": failed at " + Util.now( ) );
 				}
-				catch( IOException ioe ) {
-					LOG.error( ioe.getMessage( ), ioe );					
+				catch( Exception ioe ) {
+					//the exception cause has already been processed
 				}
 			}
 		}
@@ -84,5 +83,18 @@ public abstract class WebSocketServiceTxt extends Endpoint {
 	 * @throws Exception
 	 */
 	protected abstract void processMessage( String message, RemoteEndpoint.Basic reb ) throws Exception;
+
+	/**
+	 * Sends text to the remote end point
+	 * 
+	 * @param reb the remote end point
+	 * @param sText the text to send
+	 * 
+	 * @throws Exception
+	 */
+	protected void sendText( RemoteEndpoint.Basic reb, String sText ) throws Exception {
+		reb.sendText( sText );
+		LOG.info( sText );		
+	}
 }	
 

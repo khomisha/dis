@@ -39,6 +39,7 @@ public class TransExecutor extends Executor {
 			KettleEnvironment.init( false );
 		}
 		
+		setTaskId( Util.getUID( ) );
 		Script script = ServerContext.INSTANCE.getScriptMgr( ).getScript( getScriptName( ) ); 
 	    TransMeta transMeta = ( TransMeta )script.getMeta( );
 	    Trans trans = new Trans( transMeta );

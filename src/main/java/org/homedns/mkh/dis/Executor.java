@@ -21,9 +21,11 @@ package org.homedns.mkh.dis;
 import org.apache.log4j.Logger;
 import java.util.Date;
 import java.util.Map;
+//import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.logging.KettleLogStore;
 import org.pentaho.di.core.logging.LoggingBuffer;
+//import org.pentaho.di.core.logging.LoggingRegistry;
 import org.pentaho.di.core.variables.VariableSpace;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -35,7 +37,8 @@ public abstract class Executor implements org.quartz.Job {
 	private static final Logger LOG = Logger.getLogger( Executor.class );
 
 	private String scriptName;
-	private Map< String, String[] > scriptParams; 
+	private Map< String, String[] > scriptParams;
+	private long lTaskId = 0;
 
 	/**
 	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
@@ -82,6 +85,24 @@ public abstract class Executor implements org.quartz.Job {
 	}
 	
 	/**
+	 * Returns executing task (job or transformation id), if specified otherwise return 0
+	 * 
+	 * @return the task id
+	 */
+	public long getTaskId( ) {
+		return( lTaskId );
+	}
+
+	/**
+	 * Sets executing task (job or transformation) id
+	 * 
+	 * @param lTaskId the task id to set
+	 */
+	public void setTaskId( long lTaskId ) {
+		this.lTaskId = lTaskId;
+	}
+
+	/**
 	 * Returns script parameters
 	 * 
 	 * @return the script parameters
@@ -117,7 +138,7 @@ public abstract class Executor implements org.quartz.Job {
 		space.initializeVariablesFrom( null );
 		for( String sParamName : scriptParams.keySet( ) ) {
 			space.setVariable( sParamName, scriptParams.get( sParamName )[ 0 ] );
-			LOG.debug( "get variable: " + sParamName + " value: " + space.getVariable( sParamName ) );
+//			LOG.debug( "get variable: " + sParamName + " value: " + space.getVariable( sParamName ) );
 		}		
 	}
 	
@@ -130,6 +151,12 @@ public abstract class Executor implements org.quartz.Job {
 	 */
 	protected void onError( int iErrNum, String sChannelId ) throws KettleException {
 		if( iErrNum == 0 ) {
+//			LoggingRegistry registry = LoggingRegistry.getInstance( );
+//			if( registry.getLogChannelChildren( sChannelId ) != null ) { 
+//				KettleLogStore.discardLines( sChannelId, true );
+//				AbstractMeta meta = ServerContext.INSTANCE.getScriptMgr( ).getScript( getScriptName( ) ).getMeta( );
+//				KettleLogStore.discardLines( meta.getLogChannelId( ), true );
+//			}
 			return;
 		}
 		LoggingBuffer appender = KettleLogStore.getAppender( );

@@ -18,6 +18,8 @@
 
 package org.homedns.mkh.dis;
 
+import java.util.Properties;
+
 import javax.sql.DataSource;
 
 /**
@@ -32,6 +34,7 @@ public class ServerContext {
 	private String sResourcePath;
 	private ScriptScheduler scheduler;
 	private DataSource ds;
+	private Properties parameters;
 	
 	private ServerContext( ) {
 	}
@@ -126,5 +129,23 @@ public class ServerContext {
 	 */
 	public void setDataSource( DataSource ds ) {
 		this.ds = ds;
+	}
+
+	/**
+	 * Returns application parameters
+	 * 
+	 * @return the application parameters
+	 */
+	public Properties getParameters( ) {
+		return( parameters );
+	}
+
+	/**
+	 * Sets application parameters
+	 * 
+	 * @param parameters the application parameters to set
+	 */
+	public void setParameters( Properties parameters ) {
+		this.parameters = parameters;
 	}
 }
